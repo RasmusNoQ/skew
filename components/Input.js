@@ -11,9 +11,11 @@ import {
     updateDoc,
 } from "@firebase/firestore";
 import {getDownloadURL,ref,uploadString} from "@firebase/storage"
+import {signOut,useSession} from 'next-auth/react'
 
 
 function Input(){
+    const {data:session} = useSession();
     const [input,setInput] = useState("")
     const [selectedFile,setSelectedFile] = useState(null);
     const [showEmojis,setShowEmojis] = useState(false)
@@ -42,10 +44,10 @@ function Input(){
         setLoading(true);
 
         const docRef = await addDoc(collection(db,'posts'),{
-            // id: session.user.uid,
-            // username: session.user.name,
-            // userImg: session.user.image,
-            // tag: session.user.tag,
+            id: session.user.uid,
+            username: session.user.name,
+            userImg: session.user.image,
+            tag: session.user.tag,
             text: input,
             timestamp: serverTimestamp(),
         });
@@ -73,8 +75,8 @@ function Input(){
 
     
     return(
-        <div className={`border-b border-gray-700 p-3 flex space-x-3 overflow-y-scroll ${loading && 'opacity-60'}`}>
-            <img src="https://pbs.twimg.com/profile_images/1372814171105021958/L_xX9tQs_400x400.jpg" alt=""
+        <div className={`border-b border-gray-700 p-3 flex space-x-3 overflow-y-scroll scrollbar-hide ${loading && 'opacity-60'}`}>
+            <img src={session.user.image} alt=""
             className="h-11 w-11 rounded-full cursor-pointer"/>
             <div className="w-full divide-y divide-gray-700">
                 <div className={`${selectedFile && 'pb-7'} ${input && 'space-y-2.5'}`}>

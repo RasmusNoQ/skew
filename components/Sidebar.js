@@ -12,21 +12,14 @@ import {
     DotsCircleHorizontalIcon,
     DotsHorizontalIcon,
 } from '@heroicons/react/outline'
+import { useSession,signOut } from 'next-auth/react';
 
-const Links = [
-    {text:"Home",Icon:{HomeIcon},active:true},
-    {text:"Home",Icon:{HashtagIcon},active:false},
-    {text:"Home",Icon:{BellIcon},active:false},
-    {text:"Home",Icon:{InboxIcon},active:false},
-    {text:"Home",Icon:{BookmarkIcon},active:false},
-    {text:"Home",Icon:{ClipboardListIcon},active:false},
-    {text:"Home",Icon:{UserIcon},active:false},
-    {text:"Home",Icon:{DotsCircleHorizontalIcon},active:false},
-]
 
 
 
 function Sidebar() {
+  const { data: session } = useSession();
+
   return (
     <div className='hidden sm:flex flex-col items-center 
     xl:items-start xl:w-[340px] p-2 fixed h-full'>
@@ -45,13 +38,13 @@ function Sidebar() {
         </div>  
         <button className='hidden xl:inline ml-auto bg-[#1d9bf0] text-white w-56 h-[52px] rounded-full
         text-lg font-bold shadow-md hover:bg-[#1a8cd8]'>Tweet</button>
-        <div className='text-[#d9d9d9] flex items-center justify-center hoverAnimation xl:ml-auto xl:-mr-5 mt-auto'>
-          <img src="https://pbs.twimg.com/profile_images/1372814171105021958/L_xX9tQs_400x400.jpg"
+        <div className='text-[#d9d9d9] flex items-center justify-center hoverAnimation xl:ml-auto xl:-mr-5 mt-auto' onClick={signOut}>
+          <img src={session.user.image}
           alt=""
           className="h-10 w-10 rounded-full xl:mr-2.5"/>
           <div className="hidden xl:inline leading-5">
-            <h4 className="font-bold">Daniel Lucas</h4>
-            <p className="text-[#6e767d]">firebase1875</p>
+            <h4 className="font-bold">{session.user.name}</h4>
+            <p className="text-[#6e767d]">{session.user.tag}</p>
           </div>
           <DotsHorizontalIcon className='h-5 hidden xl:inline ml-10'/>
         </div>

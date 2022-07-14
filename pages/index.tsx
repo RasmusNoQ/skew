@@ -1,15 +1,22 @@
 import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
+import Head from "next/head";
+import Feed from "../components/Feed";
+import Sidebar from "../components/Sidebar";
+import Widgets from "../components/Widgets";
 import { getProviders, getSession, useSession } from "next-auth/react";
-import Sidebar from '../components/Sidebar'
-import Feed from '../components/Feed'
-import Login from '../components/Login'
+import Login from "../components/Login";
+import Modal from "../components/Modal";
+import { modalState } from "../atoms/modalAtom";
+import { useRecoilState } from "recoil";
 
 
 
 const Home: NextPage = ({trendingResults,followResults,providers}:any) => {
+
+  
   const { data: session } = useSession();
+  const [isOpen, setIsOpen] = useRecoilState(modalState);
+
 
   if(!session) return <Login providers={providers}/>
   
@@ -25,10 +32,16 @@ const Home: NextPage = ({trendingResults,followResults,providers}:any) => {
         <Sidebar/>
         {/* Feed */}
         <Feed/>
+        
 
         {/* Widgets */}
+        <Widgets
+          trendingResults={trendingResults}
+          followResults={followResults}
+        />
 
-        {/* Modal */}
+
+        {isOpen && <Modal />}
         
       </main>
 
